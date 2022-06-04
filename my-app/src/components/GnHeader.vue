@@ -6,74 +6,80 @@
           <div class="logo__center">
             <img src="@/assets/img/logo1.svg" alt="Logo image" />
           </div>
-          <div class="logo__pulse-mini"></div>
-          <div class="logo__pulse-big"></div>
+          <div class="logo__pulse-mini" />
+          <div class="logo__pulse-big" />
         </div>
         <nav class="header__nav-items">
           <div class="header__swipe-wrapper">
-            <span class="header__swipe-item">Видео</span>
-            <span class="header__swipe-item">Статьи</span>
+            <span
+              :class="{ swipeActive: isSwipeActive1 }"
+              class="header__swipe-item"
+              @click="changeActiveSwipe1"
+              >Видео</span
+            >
+            <span
+              :class="{ swipeActive: isSwipeActive2 }"
+              class="header__swipe-item"
+              @click="changeActiveSwipe2"
+              >Статьи</span
+            >
           </div>
-          <div class="header__dropdown">
-            <div class="header__dropdown-wrapper">
-              <div class="header__dropdown-item dropdown-item">
-                <img
-                  class="dropdown-item__img"
-                  src="@/assets/img/nav_img/01.svg"
-                />
-                <div class="dropdown-item__name">Новое</div>
-              </div>
+          <div class="header__dropdown-page">
+            <div class="header__dropdown-wrapper dropdown">
               <div
-                class="header__dropdown-item dropdown-item"
-                style="display: none"
+                class="dropdown__select"
+                @click="areOptionsVisible = !areOptionsVisible"
               >
+                <div class="dropdown__selected-option option">
+                  <img
+                    class="option__img"
+                    :src="require('@/assets/img/nav_img/' + selectedOption.src)"
+                  />
+                  <div class="option__name">{{ selectedOption.name }}</div>
+                </div>
                 <img
-                  class="dropdown-item__img"
-                  src="@/assets/img/nav_img/02.svg"
+                  src="@/assets/img/nav_img/03.svg"
+                  alt="dropdown-arrow"
+                  class="dropdown__arrow"
+                  :class="{ arrowActive: areOptionsVisible }"
                 />
-                <div class="dropdown-item__name">Популярное</div>
+              </div>
+              <div class="dropdown__options" v-if="areOptionsVisible">
+                <div
+                  v-for="option in options"
+                  :key="option.value"
+                  @click="selectOption(option)"
+                  class="dropdown__option option"
+                >
+                  <img
+                    v-if="selectedOption.src != option.src"
+                    class="option__img"
+                    :src="require('@/assets/img/nav_img/' + option.src)"
+                  />
+                  <div
+                    v-if="selectedOption.name != option.name"
+                    class="option__name"
+                  >
+                    {{ option.name }}
+                  </div>
+                </div>
               </div>
             </div>
-            <img
-              src="@/assets/img/nav_img/03.svg"
-              alt="dropdown-arrow"
-              class="header__arrow"
-            />
           </div>
         </nav>
-        <div class="header__socials socials">
-          <img
-            src="@/assets/img/socials/search.svg"
-            alt="search"
-            class="socials__search"
-          />
+        <div class="header__social social">
+          <img src="@/assets/img/socials/search.svg" alt="search" />
           <a href="" class="social__link">
-            <img
-              src="@/assets/img/socials/01.svg"
-              alt="vk"
-              class="socials__vk"
-            />
+            <img src="@/assets/img/socials/01.svg" alt="vk" />
           </a>
           <a href="" class="social__link">
-            <img
-              src="@/assets/img/socials/02.svg"
-              alt="twitter"
-              class="socials__twitter"
-            />
+            <img src="@/assets/img/socials/02.svg" alt="twitter" />
           </a>
           <a href="" class="social__link">
-            <img
-              src="@/assets/img/socials/03.svg"
-              alt="telegram"
-              class="socials__telegram"
-            />
+            <img src="@/assets/img/socials/03.svg" alt="telegram" />
           </a>
           <a href="" class="social__link">
-            <img
-              src="@/assets/img/socials/04.svg"
-              alt="dots"
-              class="socials__dots"
-            />
+            <img src="@/assets/img/socials/04.svg" alt="dots" />
           </a>
         </div>
       </div>
@@ -82,18 +88,49 @@
 </template>
 
 <script>
-export default {};
+export default {
+  data() {
+    return {
+      isSwipeActive1: true,
+      isSwipeActive2: false,
+      areOptionsVisible: false,
+      selectedOption: { src: "01.svg", name: "Новое" },
+      options: [
+        { src: "01.svg", name: "Новое", value: "1" },
+        { src: "02.svg", name: "Популярное", value: "2" },
+      ],
+    };
+  },
+  methods: {
+    selectOption(option) {
+      this.selectedOption.src = option.src;
+      this.selectedOption.name = option.name;
+      this.areOptionsVisible = false;
+    },
+    changeActiveSwipe1() {
+      this.isSwipeActive2 = false;
+      this.isSwipeActive1 = true;
+    },
+    changeActiveSwipe2() {
+      this.isSwipeActive2 = true;
+      this.isSwipeActive1 = false;
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
+//=========================================================================================
+
 .header {
   padding: 35px 0;
   background: #fafbff;
   box-shadow: 0px 2px 7px rgba(209, 209, 209, 0.35);
   &__container {
     margin: 0 auto;
-    width: 1294px;
+    max-width: 1294px;
     padding: 0 15px;
+    padding-left: 35px;
   }
 
   &__body {
@@ -122,29 +159,21 @@ export default {};
 
   &__swipe-item {
     padding: 4px 24px;
+    cursor: pointer;
 
     > *:not(:first-child) {
       margin-left: 10px;
     }
   }
 
-  &__dropdown {
-    display: flex;
+  &__dropdown-page {
   }
 
   &__dropdown-wrapper {
-    display: flex;
-    flex-direction: column;
+    cursor: pointer;
   }
 
-  &__dropdown-item {
-  }
-
-  &__arrow {
-    margin-left: 8px;
-  }
-
-  &__socials {
+  &__social {
   }
 }
 .logo {
@@ -216,7 +245,37 @@ export default {};
     }
   }
 }
-.dropdown-item {
+.dropdown {
+  position: relative;
+  &__select {
+    display: flex;
+    align-items: center;
+  }
+
+  &__selected-option {
+    font-weight: 800;
+  }
+
+  &__arrow {
+    margin-left: 8px;
+    transition-duration: 0.5s;
+  }
+
+  &__options {
+    position: absolute;
+    padding: 9px 12px 12px 12px;
+    background: #fafbff;
+    box-shadow: 0px 0px 4px #d9dff2;
+    border-radius: 6px;
+    min-width: max-content;
+    left: -11px;
+    top: calc(100% + 5px);
+  }
+
+  &__option {
+  }
+}
+.option {
   display: flex;
   align-items: center;
   > *:not(:last-child) {
@@ -229,27 +288,30 @@ export default {};
   &__name {
   }
 }
-.socials {
+
+.social {
   > *:not(:first-child, :last-child) {
     margin-right: 24px;
   }
-
-  &__search {
-    &:first-child {
-      margin-right: 28px;
-    }
+  > *:first-child {
+    margin-right: 28px;
+    cursor: pointer;
   }
 
-  &__vk {
+  &__link {
   }
+}
+.arrowActive {
+  -webkit-transform: scaleY(-1);
+  transform: scaleY(-1);
+}
+.swipeActive {
+  background: #1bc6c6;
+  border-radius: 20px;
+  font-weight: 800;
 
-  &__twitter {
-  }
+  color: #ffffff;
 
-  &__telegram {
-  }
-
-  &__dots {
-  }
+  transition-duration: 1s;
 }
 </style>
