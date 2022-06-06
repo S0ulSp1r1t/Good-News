@@ -1,19 +1,21 @@
 <template>
-  <section class="post-item">
-    <img
-      class="post-item__img"
-      :src="require('@/assets/img/post/' + post.image)"
-    />
-    <h3 class="post-item__title">{{ post.title }}</h3>
-    <div class="post-item__time">8 часов назад</div>
-    <div class="post-item__actions">
-      <div class="post-item__open">Развернуть</div>
-      <a href="" class="post-item__share share">
-        <div class="share__name">Поделиться</div>
-        <img src="@/assets/img/UI/share.svg" class="share__img" />
-      </a>
-    </div>
-  </section>
+  <router-link :to="{ name: 'PostPage', params: { id: post.id } }">
+    <section class="post-item">
+      <img
+        class="post-item__img"
+        :src="require('@/assets/img/post/' + post.image)"
+      />
+      <h3 class="post-item__title">{{ post.title }}</h3>
+      <div class="post-item__time">8 часов назад</div>
+      <div class="post-item__actions">
+        <div class="post-item__open">Развернуть</div>
+        <a href="" class="post-item__share share">
+          <div class="share__name">Поделиться</div>
+          <img src="@/assets/img/UI/share.svg" class="share__img" />
+        </a>
+      </div>
+    </section>
+  </router-link>
 </template>
 
 <script>
