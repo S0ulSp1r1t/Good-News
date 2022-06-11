@@ -5,6 +5,7 @@
         class="post-item__img"
         :src="require('@/assets/img/post/' + post.image)"
       />
+      <div class="">{{ post.id }}</div>
       <h3 class="post-item__title">{{ post.title }}</h3>
       <div class="post-item__time">8 часов назад</div>
       <div class="post-item__actions">

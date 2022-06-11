@@ -2,12 +2,9 @@
   <main class="main-page">
     <div class="main-page__container">
       <div class="main-page__body">
-        <gn-post-item
-          v-for="post in POSTS"
-          :key="post.id"
-          :post="post"
-        ></gn-post-item>
+        <gn-post-item v-for="post in POSTS" :key="post.id" :post="post" />
       </div>
+      <div ref="observer" class="observer"></div>
     </div>
   </main>
 </template>
@@ -27,10 +24,24 @@ export default {
     ...mapGetters(["POSTS"]),
   },
   methods: {
-    ...mapActions(["GET_POSTS_FROM_API"]),
+    ...mapActions(["GET_POSTS_FROM_API", "LOAD_MORE_POSTS"]),
   },
   mounted() {
     this.GET_POSTS_FROM_API();
+    const options = {
+      rootMargin: "0px",
+      threshold: 1.0,
+    };
+    const callback = (entries) => {
+      if (
+        entries[0].isIntersecting &&
+        this.$store.state.page < this.$store.state.totalPages
+      ) {
+        this.LOAD_MORE_POSTS();
+      }
+    };
+    const observer = new IntersectionObserver(callback, options);
+    observer.observe(this.$refs.observer);
   },
 };
 </script>
